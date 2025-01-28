@@ -15,6 +15,7 @@ const _layout = () => {
         <Stack.Screen name="emergency-contact" />
         <Stack.Screen name="register" />
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="nearest-police-station" />
       </PaperProvider>
     </Stack>
   );

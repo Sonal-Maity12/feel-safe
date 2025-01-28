@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     marginTop: 4,
-    backgroundColor: '',
+    backgroundColor: 'purple',
     borderRadius: 4,
     width:80,
   },

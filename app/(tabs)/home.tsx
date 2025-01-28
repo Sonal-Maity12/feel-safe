@@ -71,7 +71,7 @@ export default function HomePage() {
                 mode="contained"
                 icon="map-marker-path"
                 style={styles.button}
-                onPress={() => alert("Track Police Station")}
+                onPress={() => router.push("/nearest-police-stations")}
               >
                 Track Now
               </Button>
