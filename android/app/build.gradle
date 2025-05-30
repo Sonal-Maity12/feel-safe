@@ -83,17 +83,31 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdk rootProject.ext.compileSdkVersion
+    buildToolsVersion "34.0.0"
+    compileSdk 34
 
     namespace 'com.sona345.feelsafe'
     defaultConfig {
         applicationId 'com.sona345.feelsafe'
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk 34
         versionCode 1
         versionName "1.0.0"
+
+        externalNativeBuild {
+            cmake {
+                version "3.22.1"
+            }
+        }
     }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
