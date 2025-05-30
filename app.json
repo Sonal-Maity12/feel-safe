@@ -95,7 +95,7 @@
       ],
       "expo-font"
     ],
-    "owner": "son345",
+    "owner": "sona345",
     "packagerOpts": {
       "sourceMap": false
     },
@@ -104,7 +104,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "1c1ff92b-4550-48e3-a603-fc4e0ecd52a1"
+        "projectId": "e69e7abd-d589-4915-9511-4ac332cceb29"
       }
     }
   }
