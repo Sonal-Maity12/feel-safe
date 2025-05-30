@@ -2,22 +2,25 @@
 
 buildscript {
     ext {
-        buildToolsVersion = findProperty('android.buildToolsVersion') ?: '34.0.0'
-        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '24')
-        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
-        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
-        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.22'
-
-        ndkVersion = "26.1.10909125"
+        buildToolsVersion = findProperty('android.buildToolsVersion') ?: '33.0.0'
+        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
+        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '33')
+        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '33')
+        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.8.0'
+        
+        ndkVersion = "25.1.8937393"
+        
+        // Add Java version configuration
+        JavaVersion.VERSION_11
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:8.1.0')
-        classpath('com.facebook.react:react-native-gradle-plugin')
-        classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22')
+        classpath('com.android.tools.build:gradle:7.4.2')
+        classpath('com.facebook.react:react-native-gradle-plugin:0.73.5')
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
@@ -39,3 +42,6 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+
+// Don't cache node_modules
+org.gradle.caching=true
