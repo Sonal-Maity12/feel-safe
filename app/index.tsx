@@ -1,123 +1,47 @@
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { View, ActivityIndicator, Text } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Title, HelperText, Text } from 'react-native-paper';
 
-export default function LoginScreen() {
-  const router = useRouter()
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false); 
+async function clearDataIfFirstRun() {
+  const firstRun = await AsyncStorage.getItem('@first_run');
+  if (!firstRun) {
+    // First run after reinstall, clear stored data
+    await AsyncStorage.clear();
+    await AsyncStorage.setItem('@first_run', 'true');  // Mark as not first run
+  }
+}
 
-  const validateEmail = (email: string) => {
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return emailPattern.test(email);
-  };
+export default function Index() {
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
-  const handleLogin = () => {
-    // if (!email) {
-    //   setEmailError('Email is required');
-    // } else if (!validateEmail(email)) {
-    //   setEmailError('Enter a valid email');
-    // } else {
-    //   setEmailError('');
-    // }
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        await clearDataIfFirstRun();  // Clear data if first run
 
-    // if (!password) {
-    //   setPasswordError('Password is required');
-    // } else {
-    //   setPasswordError('');
-    // }
+        // After checking first run, check if user credentials exist
+        const userCredentials = await AsyncStorage.getItem('@user_credentials');
+        if (userCredentials) {
+          router.replace('/home');  // Navigate to home if user is logged in
+        } else {
+          router.replace('/login');  // Navigate to login if no credentials found
+        }
+      } catch (error) {
+        console.error("Error during initialization:", error);
+        router.replace('/login');  // Fallback to login if error occurs
+      } finally {
+        setIsLoading(false);  // Ensure that loading is set to false after the operation
+      }
+    };
 
-    // if (email && validateEmail(email) && password) {
-    //   console.log('Logged in', email, password);
-    // router.push("/(tabs)/home")
-    // }
-
-    
-    router.push("/(tabs)/home")
-  };
+    initializeApp();
+  }, [router]);
 
   return (
-    <View style={styles.container}>
-      <Title style={styles.title}>Welcome Back</Title>
-
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        style={styles.input}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        error={emailError !== ''}
-      />
-      <HelperText type="error" visible={emailError !== ''}>
-        {emailError}
-      </HelperText>
-
-      <View style={styles.passwordContainer}>
-        <TextInput
-          label="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry={!isPasswordVisible} // Toggle visibility of the password
-          error={passwordError !== ''}
-        />
-        <Ionicons
-          name={isPasswordVisible ? 'eye-off' : 'eye'}
-          size={24}
-          color="gray"
-          style={styles.eyeIcon}
-          onPress={() => setIsPasswordVisible(!isPasswordVisible)} // Toggle password visibility
-        />
-      </View>
-      <HelperText type="error" visible={passwordError !== ''}>
-        {passwordError}
-      </HelperText>
-
-      <Button mode="contained" onPress={handleLogin} style={styles.button}>
-        Login
-      </Button>
-      <Text style={styles.registerText} onPress={() => router.push("/register")}>
-        Don't have an account? Register
-      </Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {isLoading ? <ActivityIndicator size="large" color="#1565c0" /> : <Text>Loading...</Text>}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 20,
-    fontSize: 30,
-    color: "purple"
-  },
-  input: {
-    marginBottom: 10,
-  },
-  button: {
-    marginTop: 20,
-  },
-  registerText: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: 'blue',
-  },
-  passwordContainer: {
-    position: 'relative',
-  },
-  eyeIcon: {
-    position: 'absolute',
-    right: 10,
-    top: 20,
-  },
-});
